@@ -14,4 +14,7 @@ Changing a color is done by adding: "#FF0000 = #010000" to cli
 Templates are used by adding the filepath to the cl call.
 
 
+
+
+
 Author: J. v. Reimersdahl
