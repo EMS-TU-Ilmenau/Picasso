@@ -15,6 +15,19 @@
 # limitations under the License.
 '''Setup script for installing Picasso with pip'''
 
+# determine requirements for install and setup
+def checkRequirement(lstRequirements, importName, requirementName):
+    '''
+    Don't add packages unconditionally as this involves the risk of updating an
+    already installed package. Sometimes this may break during install or mix
+    up dependencies after install. Consider an update only if the requested
+    package is not installed at all.
+    '''
+    try:
+        __import__(importName)
+    except ImportError:
+        lstRequirements.append(requirementName)
+
 # import modules
 import sys
 import os
@@ -42,7 +55,15 @@ else:
 
 packageVersion  = picasso.__version__
 
+
 if __name__ == '__main__':
+    # check if all requirements are met prior to actually calling setup()
+    setupRequires = []
+    installRequires = []
+    checkRequirement(setupRequires, 'setuptools', 'setuptools>=18.0')
+    checkRequirement(installRequires, 'PIL', 'PIL>=1.1.7')
+    checkRequirement(installRequires, 'numpy', 'numpy>=1.16.4')
+
     setup(
         name=packageName,
         version=packageVersion,
@@ -71,7 +92,7 @@ if __name__ == '__main__':
             'Topic :: Utilities'
         ],
         keywords=('image manipulation'),
-        install_requires=['PIL>=1.1.7',
-                        'numpy>=1.16.4'],
+        setup_requires=setupRequires,
+        install_requires=installRequires,
         scripts=[bin/picasso]
     )
