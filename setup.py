@@ -37,7 +37,7 @@ import os
 from setuptools import setup
 
 # global package constants
-packageName     = 'Picasso'
+packageName     = 'EMS-Picasso'
 picassoScript    = 'bin/picasso'
 if sys.version_info < (3, 0):
     # python 2
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     setupRequires = []
     installRequires = []
     checkRequirement(setupRequires, 'setuptools', 'setuptools>=18.0')
-    checkRequirement(installRequires, 'PIL', 'PIL>=1.1.7')
+    checkRequirement(installRequires, 'Pillow', 'Pillow>=4.0.0')
     checkRequirement(installRequires, 'numpy', 'numpy>=1.16.4')
 
     setup(
@@ -97,5 +97,5 @@ if __name__ == '__main__':
         keywords=('image manipulation'),
         setup_requires=setupRequires,
         install_requires=installRequires,
-        scripts=[bin/picasso]
+        scripts=['bin/picasso']
     )
