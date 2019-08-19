@@ -148,7 +148,7 @@ if __name__ == '__main__':
         description=('A tool to modify images.'),
         author='Christoph Wagner, EMS Research Group TU Ilmenau',
         author_email='christoph.wagner@tu-ilmenau.de',
-        url='https://ems-tu-ilmenau.github.io/Picasso/',
+        url='https://github.com/EMS-TU-Ilmenau/Picasso',
         license='Apache Software License',
         classifiers=[
             'Development Status :: 3 - Alpha',

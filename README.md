@@ -3,7 +3,7 @@ A tool to invert, modify and/or crop images.
 
 Compatibility
 ----------
-The tool is able to process RGB and RGBA images. 
+The tool is able to process RGB and RGBA images.
 
 Abilities
 ----------
@@ -17,4 +17,5 @@ Templates are used by adding the filepath to the cl call.
 
 
 
-Author: J. v. Reimersdahl
+Author: Christoph Wagner, EMS TU Ilmenau
+          Johannes van Reimersdahl, EMS TU Ilmenau
