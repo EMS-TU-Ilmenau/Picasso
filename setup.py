@@ -38,7 +38,79 @@ from setuptools import setup
 
 # global package constants
 packageName     = 'EMS-Picasso'
-picassoScript    = 'bin/picasso'
+packageVersion  = '0.2'     #fallback version tag
+picassoScript   = 'bin/picasso'
+fullVersion     = packageVersion
+strVersionFile  = "%s/version.py" %(packageName)
+
+VERSION_PY = """
+# -*- coding: utf-8 -*-
+# This file carries the module's version information which will be updated
+# during execution of the installation script, setup.py. Distribution tarballs
+# contain a pre-generated copy of this file.
+
+__version__ = '%s'
+"""
+
+##############################################################################
+### function and class declaration section. DO NOT PUT SCRIPT CODE IN BETWEEN
+##############################################################################
+
+def getCurrentVersion():
+    '''
+    Determine package version and put it in the signatures.
+    '''
+    global packageVersion
+    global fullVersion
+
+    # check if there is a manual version override
+    if os.path.isfile(".version"):
+        with open(".version", "r") as f:
+            stdout = f.read().split('\n')[0]
+        print("Override of version string to '%s' (from .version file )" % (
+            stdout))
+
+        fullVersion = stdout
+
+    else:
+        # check if source directory is a git repository
+        if not os.path.exists(".git"):
+            print(("Installing from something other than a Git repository; " +
+                   "Version file '%s' untouched.") % (strVersionFile))
+            return
+
+        # fetch current tag and commit description from git
+        try:
+            p = subprocess.Popen(
+                ["git", "describe", "--tags", "--dirty", "--always"],
+                stdout=subprocess.PIPE
+            )
+        except EnvironmentError:
+            print("Not a git repository; Version file '%s' not touched." % (
+                strVersionFile))
+            return
+
+        stdout = p.communicate()[0].strip()
+        if stdout is not str:
+            stdout = stdout.decode()
+
+        if p.returncode != 0:
+            print(("Unable to fetch version from git repository; " +
+                   "leaving version file '%s' untouched.") % (strVersionFile))
+            return
+
+        fullVersion = stdout
+
+    # output results to version string, extract package version number from
+    # `fullVersion` as this string might also contain additional tags (e.g.
+    # commit hashes or `-dirty` flags from git tags)
+    versionMatch = re.match(r"[.+\d+]+\d*[abr]\d*", fullVersion)
+    if versionMatch:
+        packageVersion = versionMatch.group(0)
+        print("Fetched package version number from git tag (%s)." % (
+            packageVersion))
+
+
 if sys.version_info < (3, 0):
     # python 2
     import imp
@@ -60,6 +132,8 @@ packageVersion  = picasso.__version__
 
 
 if __name__ == '__main__':
+    # get version from git and update Picasso/__init__.py accordingly
+    getCurrentVersion()
     # check if all requirements are met prior to actually calling setup()
     setupRequires = []
     installRequires = []
