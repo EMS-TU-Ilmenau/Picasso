@@ -172,5 +172,6 @@ if __name__ == '__main__':
         keywords=('image manipulation'),
         setup_requires=setupRequires,
         install_requires=installRequires,
+        packages = ['EMS-Picasso'],
         scripts=['bin/picasso']
     )
