@@ -34,6 +34,7 @@ def checkRequirement(lstRequirements, importName, requirementName):
 # import modules
 import sys
 import os
+import re
 from setuptools import setup
 
 # global package constants
