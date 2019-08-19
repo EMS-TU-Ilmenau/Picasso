@@ -27,6 +27,9 @@ def checkRequirement(lstRequirements, importName, requirementName):
         __import__(importName)
     except ImportError:
         lstRequirements.append(requirementName)
+    else:
+        if 'bdist_wheel' in sys.argv[1:]:
+            lstRequirements.append(requirementName)
 
 # import modules
 import sys
