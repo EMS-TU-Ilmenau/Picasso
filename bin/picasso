@@ -27,9 +27,9 @@
 #  Author: Christoph Wagner, 04.01.2019, EMS Research Group TU Ilmenau
 #  Coauthor: Johannes van Reimersdahl, 04.01.2019, EMS Research Group TU Ilmenau
 
-__version__ = '0.2'
+__version__ = '0.2.2'
 
-if __name__ == '__main__':   
+if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
                         description = "Picasso is a tool to modify images."
