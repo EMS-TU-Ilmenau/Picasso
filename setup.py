@@ -23,7 +23,7 @@ from setuptools import setup
 
 # global package constants
 packageName     = 'EMS-Picasso'
-packageVersion  = '0.2'     #fallback version tag
+packageVersion  = '0.2.3'     #fallback version tag
 picassoScript   = 'bin/picasso'
 fullVersion     = packageVersion
 strVersionFile  = "%s/version.py" %(packageName)
