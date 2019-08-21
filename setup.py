@@ -15,22 +15,6 @@
 # limitations under the License.
 '''Setup script for installing Picasso with pip'''
 
-# determine requirements for install and setup
-def checkRequirement(lstRequirements, importName, requirementName):
-    '''
-    Don't add packages unconditionally as this involves the risk of updating an
-    already installed package. Sometimes this may break during install or mix
-    up dependencies after install. Consider an update only if the requested
-    package is not installed at all.
-    '''
-    try:
-        __import__(importName)
-    except ImportError:
-        lstRequirements.append(requirementName)
-    else:
-        if 'bdist_wheel' in sys.argv[1:]:
-            lstRequirements.append(requirementName)
-
 # import modules
 import sys
 import os
@@ -56,6 +40,22 @@ __version__ = '%s'
 ##############################################################################
 ### function and class declaration section. DO NOT PUT SCRIPT CODE IN BETWEEN
 ##############################################################################
+
+# determine requirements for install and setup
+def checkRequirement(lstRequirements, importName, requirementName):
+    '''
+    Don't add packages unconditionally as this involves the risk of updating an
+    already installed package. Sometimes this may break during install or mix
+    up dependencies after install. Consider an update only if the requested
+    package is not installed at all.
+    '''
+    try:
+        __import__(importName)
+    except ImportError:
+        lstRequirements.append(requirementName)
+    else:
+        if 'bdist_wheel' in sys.argv[1:]:
+            lstRequirements.append(requirementName)
 
 def getCurrentVersion():
     '''
@@ -135,6 +135,29 @@ packageVersion  = picasso.__version__
 if __name__ == '__main__':
     # get version from git and update Picasso/__init__.py accordingly
     getCurrentVersion()
+
+    # make sure there exists a version.py file in the project
+    with open(strVersionFile, "w") as f:
+        f.write(VERSION_PY % (fullVersion))
+    print("Set %s to '%s'" % (strVersionFile, fullVersion))
+
+    # get the long description from the README file.
+    # CAUTION: Python2/3 utf encoding shit calls needs some adjustments
+    fileName = os.path.join(
+        os.path.abspath(os.path.dirname(__file__)),
+        'README.md'
+    )
+
+    f = (open(fileName, 'r') if sys.version_info < (3, 0)
+         else open(fileName, 'r', encoding='utf-8'))
+    longDescription = f.read()
+    f.close()
+
+    print("Building %s v%s" % (
+        packageName,
+        packageVersion
+    ))
+
     # check if all requirements are met prior to actually calling setup()
     setupRequires = []
     installRequires = []
@@ -146,6 +169,7 @@ if __name__ == '__main__':
         name=packageName,
         version=packageVersion,
         description=('A tool to modify images.'),
+        long_description=longDescription,
         author='Christoph Wagner, EMS Research Group TU Ilmenau',
         author_email='christoph.wagner@tu-ilmenau.de',
         url='https://github.com/EMS-TU-Ilmenau/Picasso',
