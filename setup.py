@@ -73,63 +73,7 @@ def getCurrentVersion():
 
         fullVersion = stdout
 
-    else:
-        # check if source directory is a git repository
-        if not os.path.exists(".git"):
-            print(("Installing from something other than a Git repository; " +
-                   "Version file '%s' untouched.") % (strVersionFile))
-            return
-
-        # fetch current tag and commit description from git
-        try:
-            p = subprocess.Popen(
-                ["git", "describe", "--tags", "--dirty", "--always"],
-                stdout=subprocess.PIPE
-            )
-        except EnvironmentError:
-            print("Not a git repository; Version file '%s' not touched." % (
-                strVersionFile))
-            return
-
-        stdout = p.communicate()[0].strip()
-        if stdout is not str:
-            stdout = stdout.decode()
-
-        if p.returncode != 0:
-            print(("Unable to fetch version from git repository; " +
-                   "leaving version file '%s' untouched.") % (strVersionFile))
-            return
-
-        fullVersion = stdout
-
-    # output results to version string, extract package version number from
-    # `fullVersion` as this string might also contain additional tags (e.g.
-    # commit hashes or `-dirty` flags from git tags)
-    versionMatch = re.match(r"[.+\d+]+\d*[abr]\d*", fullVersion)
-    if versionMatch:
-        packageVersion = versionMatch.group(0)
-        print("Fetched package version number from git tag (%s)." % (
-            packageVersion))
-
-
-if sys.version_info < (3, 0):
-    # python 2
-    import imp
-    picasso = imp.load_source('picasso', picassoScript)
-elif sys.version_info < (3, 3):
-    # python 3.0 and up
-    from importlib.machinery import SourceFileLoader
-    picasso = SourceFileLoader('picasso', picassoScript).load_module()
-else:
-    # python 3.3 and up
-    import importlib.util
-    import importlib.machinery
-    loader = importlib.machinery.SourceFileLoader('picasso', picassoScript)
-    spec = importlib.util.spec_from_loader(loader.name, loader)
-    picasso = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(picasso)
-
-packageVersion  = picasso.__version__
+    packageVersion = fullVersion
 
 
 if __name__ == '__main__':
