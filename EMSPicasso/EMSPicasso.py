@@ -34,7 +34,7 @@ import numpy
 from PIL import Image
 import PIL.ImageOps
 
-def Picasso(imageref, outputname, commands):
+def Picasso(self, imageref, outputname, commands, v):
     """
     Picasso is the slave to execute the steps given in the template or via
     cli inputs.
@@ -47,6 +47,8 @@ def Picasso(imageref, outputname, commands):
         ???
     commands : list or tuple
         list of functions to be executed
+    verbose : boolean
+        boolean describing verbose set/unset
 
     Returns:
     -----------
@@ -106,6 +108,7 @@ def Picasso(imageref, outputname, commands):
 
     if outputname == "None" :
         outputname = name + "_modified" + ext
+        
     image.save(outputname)
     image.close()
     print("Finished.")

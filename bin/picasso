@@ -30,7 +30,7 @@
 
 if __name__ == '__main__':
     import argparse
-    from EMSPicasso import EMSPicassos
+    from EMSPicasso.EMSPicasso import Picasso
 
     parser = argparse.ArgumentParser(
                         description = "Picasso is a tool to modify images."
@@ -62,12 +62,10 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    v = args.verbose
-
-    if v:
+    if args.verbose:
         print("Sourcefile: " + args.filename)
         print("Destinationfile: " + args.outputname)
         print("List of commands: ")
         print(args.commands)
 
-    Picasso(args.filename, args.outputname, args.commands)
+    Picasso(args.filename, args.outputname, args.commands, args.verbose)
