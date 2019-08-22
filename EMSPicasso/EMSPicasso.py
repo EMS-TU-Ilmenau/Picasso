@@ -28,7 +28,6 @@
 
 import os
 import sys
-import argparse
 import ast
 import re
 import numpy
@@ -37,7 +36,6 @@ import PIL.ImageOps
 
 def Picasso(imageref, outputname, commands):
     """
-    LIST NAME ÄNDERN
     Picasso is the slave to execute the steps given in the template or via
     cli inputs.
 
