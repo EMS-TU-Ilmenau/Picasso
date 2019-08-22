@@ -22,8 +22,8 @@ import re
 from setuptools import setup
 
 # global package constants
-packageName     = 'EMS-Picasso'
-packageVersion  = '0.2.3'     #fallback version tag
+packageName     = 'EMSPicasso'
+packageVersion  = '0.0.0'     #fallback version tag
 picassoScript   = 'bin/picasso'
 fullVersion     = packageVersion
 strVersionFile  = "%s/version.py" %(packageName)
@@ -123,7 +123,6 @@ if __name__ == '__main__':
             'Environment :: Console',
             'Intended Audience :: Developers',
             'Intended Audience :: End Users/Desktop',
-            'Intended Audience :: System Administrators',
             'License :: OSI Approved :: Apache Software License',
             'Natural Language :: English',
             'Operating System :: POSIX :: Linux',
@@ -131,15 +130,12 @@ if __name__ == '__main__':
             'Operating System :: Microsoft :: Windows',
             'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
-            'Topic :: Software Development :: Quality Assurance',
             'Topic :: Software Development :: Version Control :: Git',
-            'Topic :: System :: Archiving :: Backup',
-            'Topic :: System :: Archiving :: Mirroring',
             'Topic :: Utilities'
         ],
         keywords=('image manipulation'),
         setup_requires=setupRequires,
         install_requires=installRequires,
-        packages = ['EMS-Picasso'],
-        scripts=['bin/picasso']
+        packages=[packageName],
+        scripts=[picassoScript]
     )
