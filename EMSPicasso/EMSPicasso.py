@@ -1,16 +1,41 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Copyright 2019 Christoph Wagner
+#     https://www.tu-ilmenau.de/it-ems/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+#  PURPOSE
+#  =======
+#  The purpose of Picasso is to modify images using a template or entering
+#  modifications manually to make them more readable for example.
+#
+#  Requires: numpy, PIL
+#
+#  Author: Christoph Wagner, 04.01.2019, EMS Research Group TU Ilmenau
+#  Coauthor: Johannes van Reimersdahl, 04.01.2019, EMS Research Group TU Ilmenau
+
 import os
 import sys
-import argparse
 import ast
 import re
 import numpy
 from PIL import Image
 import PIL.ImageOps
 
-def Picasso(imageref, outputname, commands):
+def Picasso(imageref, outputname, commands, v):
     """
-    LIST NAME ÄNDERN
     Picasso is the slave to execute the steps given in the template or via
     cli inputs.
 
@@ -19,15 +44,17 @@ def Picasso(imageref, outputname, commands):
     imageref : str
         path of file
     outputname : str
-        ???
+        path of outputfile
     commands : list or tuple
         list of functions to be executed
+    verbose : boolean
+        boolean describing verbose set/unset
 
     Returns:
     -----------
     Nothing.
     """
-    #Preparation
+    # Preparation
     if v: print("Preparation.")
     if os.path.isfile(imageref) != True:
         sys.exit("Sourcefile not found.")
@@ -38,7 +65,7 @@ def Picasso(imageref, outputname, commands):
     if v: print("Width, Height: " + str(width) + " x " + str(height))
     rgb_image,a = detectimagemode(image)
 
-    # expand templates
+    # Expand templates
     commands_expanded = []
     for i in commands:
         if os.path.isfile(i.strip()):
@@ -48,11 +75,11 @@ def Picasso(imageref, outputname, commands):
         else:
             commands_expanded.append(i)
 
-    #Executing commands
+    # Executing commands
     if v: print("Processing commands %s"% (commands_expanded, ))
 
     for i in commands_expanded:
-        # remove leading and trailing whitespace characters (incl. tab, ...)
+        # Remove leading and trailing whitespace characters (incl. tab, ...)
         i = i.strip()
         if "=" in i:
             tokens = [tt.strip() for tt in i.split('=')]
@@ -72,7 +99,7 @@ def Picasso(imageref, outputname, commands):
         else:
             if v: print("Command not understood: %s" %(i, ))
 
-    #Steps to finish
+    # Steps to finish
     if v: print("Starting to save and name the output file.")
     if a != None:
         image = merge(rgb_image,a)
@@ -81,6 +108,7 @@ def Picasso(imageref, outputname, commands):
 
     if outputname == "None" :
         outputname = name + "_modified" + ext
+
     image.save(outputname)
     image.close()
     print("Finished.")
@@ -253,40 +281,3 @@ def crop(image):
 
     image_out = Image.fromarray(picture_out)
     return image_out
-
-parser = argparse.ArgumentParser(
-                    description = "Picasso is a tool to modify images."
-)
-
-parser.add_argument("filename", type=str,
-                    help = "filepath of the unmodified image"
-)
-
-parser.add_argument("-s", "--outputname", default = "None", type=str,
-                    help = "Filename the modifed image is supposed to have. " +
-                    "If you want to set a filename add : -s output.png " +
-                    "Else the image will be named 'sourcefile_modified.ext'"
-)
-
-parser.add_argument("commands", nargs="+",
-                    help = "colors can be given in #rrggbb, #rgb or (r,g,b). " +
-                    'Invert by writing: "invert" or "i". ' +
-                    'How to give arguments: ["color1=color2" ' +
-                    '"invert" "color3=color4"] ' +
-                    'Pratical example: ["#000001=#FF0000" "invert"]'
-)
-
-parser.add_argument("-v", "--verbose", action = "store_true", default = False,
-                    help = "Increase verbosity of text output."
-)
-
-args = parser.parse_args()
-
-v = args.verbose
-if v:
-    print("Sourcefile: " + args.filename)
-    print("Destinationfile: " + args.outputname)
-    print("List of commands: ")
-    print(args.commands)
-
-Picasso(args.filename, args.outputname, args.commands)
